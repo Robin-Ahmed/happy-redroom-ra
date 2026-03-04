@@ -47,37 +47,25 @@ header {
     position: relative;
 }
 
-/* REDROOM STYLISH TEXT */
-.cover-photo h1 {
-    position: absolute;
-    bottom: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #ff4757;
-    font-size: 36px;
-    font-weight: 900;
-    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
-    font-family: 'Roboto', sans-serif;
-}
-
-/* TELEGRAM BUTTON BELOW HEADER */
+/* TELEGRAM FLOATING BUTTON */
 .telegram-btn {
-    display: block;
-    margin: -25px auto 20px auto; /* overlap with cover */
-    background: #ff4757;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #0088cc; /* blue color */
     color: white;
-    padding: 12px 25px;
+    padding: 14px 22px;
     border-radius: 50px;
     font-weight: 700;
     text-decoration: none;
     text-align: center;
-    width: 180px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.2);
     transition: transform 0.2s, background 0.2s;
+    z-index: 1001;
 }
 .telegram-btn:hover {
-    background: #e84118;
-    transform: scale(1.05);
+    background: #006699;
+    transform: scale(1.1);
 }
 
 /* VIDEO CONTAINER */
@@ -156,12 +144,10 @@ header {
     .video-card {
         width: 90%;
     }
-    .cover-photo h1 {
-        font-size: 28px;
-    }
     .telegram-btn {
-        width: 150px;
-        padding: 10px 15px;
+        padding: 12px 18px;
+        bottom: 15px;
+        right: 15px;
     }
 }
 </style>
@@ -173,12 +159,7 @@ header {
 <header>REDROOM</header>
 
 <!-- COVER PHOTO -->
-<div class="cover-photo">
-    <h1>REDROOM</h1>
-</div>
-
-<!-- TELEGRAM BUTTON BELOW HEADER/COVER -->
-<a href="https://t.me/toXic_u0u" class="telegram-btn">Telegram</a>
+<div class="cover-photo"></div>
 
 <!-- NO INTERNET BOX -->
 <div id="no-internet">
@@ -188,6 +169,9 @@ header {
 
 <!-- VIDEO LIST -->
 <div class="video-container" id="videoList"></div>
+
+<!-- TELEGRAM FLOATING BUTTON -->
+<a href="https://t.me/toXic_u0u" class="telegram-btn">Telegram</a>
 
 <script>
 // INTERNET CHECK
