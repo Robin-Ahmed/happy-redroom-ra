@@ -28,31 +28,55 @@ header {
     padding: 20px;
     text-align: center;
     color: white;
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     position: sticky;
     top: 0;
     z-index: 1000;
 }
 
-/* TELEGRAM BUTTON */
+/* COVER PHOTO */
+.cover-photo {
+    width: 100%;
+    height: 200px;
+    background: url('https://picsum.photos/1200/400') center/cover no-repeat;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    position: relative;
+}
+
+/* REDROOM STYLISH TEXT */
+.cover-photo h1 {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ff4757;
+    font-size: 36px;
+    font-weight: 900;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+    font-family: 'Roboto', sans-serif;
+}
+
+/* TELEGRAM BUTTON BELOW HEADER */
 .telegram-btn {
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    background: #0088cc;
+    display: block;
+    margin: -25px auto 20px auto; /* overlap with cover */
+    background: #ff4757;
     color: white;
-    padding: 12px 20px;
-    border-radius: 12px;
-    font-weight: 500;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: 700;
     text-decoration: none;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    transition: transform 0.2s;
-    z-index: 1001;
+    text-align: center;
+    width: 180px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    transition: transform 0.2s, background 0.2s;
 }
 .telegram-btn:hover {
+    background: #e84118;
     transform: scale(1.05);
 }
 
@@ -132,17 +156,29 @@ header {
     .video-card {
         width: 90%;
     }
+    .cover-photo h1 {
+        font-size: 28px;
+    }
+    .telegram-btn {
+        width: 150px;
+        padding: 10px 15px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- TELEGRAM BUTTON -->
-<a href="https://t.me/toXic_u0u" class="telegram-btn">Telegram</a>
-
 <!-- HEADER -->
 <header>REDROOM</header>
+
+<!-- COVER PHOTO -->
+<div class="cover-photo">
+    <h1>REDROOM</h1>
+</div>
+
+<!-- TELEGRAM BUTTON BELOW HEADER/COVER -->
+<a href="https://t.me/toXic_u0u" class="telegram-btn">Telegram</a>
 
 <!-- NO INTERNET BOX -->
 <div id="no-internet">
@@ -184,7 +220,7 @@ function loadVideos(){
         const list = document.getElementById("videoList");
         list.innerHTML = "";
 
-        if(data.files.length === 0){
+        if(!data.files || data.files.length === 0){
             list.innerHTML = "<p style='text-align:center; width:100%; font-weight:bold;'>No videos found!</p>";
             return;
         }
