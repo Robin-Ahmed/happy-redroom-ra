@@ -3,285 +3,185 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Official Media Gallery</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<script>
-if(sessionStorage.getItem("unlocked") !== "yes"){
-    window.location.replace("security.html");
-}
-</script>    
+<title>Official Media Page</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-:root{
-    --primary:#2563eb;
-    --secondary:#1e40af;
-    --bg:#f1f5f9;
-    --card:#ffffff;
-    --text:#0f172a;
+body{
+    margin:0;
+    font-family:'Inter',sans-serif;
+    background:#f0f2f5;
 }
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
-html,body{
-    height:100%;
-    overflow:hidden;
-    background:var(--bg);
-    color:var(--text);
-}
-#introOverlay{
-    position:fixed;
-    inset:0;
-    background:black;
-    z-index:99999;
-    display:none;
-    justify-content:center;
-    align-items:center;
-}
-#introOverlay video{
-    width:90%;
-    max-width:600px;
-    border-radius:12px;
-}
-#skipIntroBtn{
-    position:absolute;
-    top:20px;
-    right:20px;
-    padding:10px 16px;
-    background:white;
-    border:none;
-    border-radius:10px;
+
+/* Header */
+.header{
+    background:#1877f2;
+    color:white;
+    padding:15px 20px;
+    font-size:22px;
     font-weight:700;
-    cursor:pointer;
-}
-header{
-    background:linear-gradient(135deg,var(--primary),var(--secondary));
-    padding:14px 18px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    position:sticky;
+    position:fixed;
+    width:100%;
     top:0;
     z-index:1000;
 }
-header h2{
-    color:white;
-    font-size:18px;
-    margin:0;
-    font-style:italic;
+
+/* Cover */
+.cover{
+    margin-top:60px;
+    height:180px;
+    background:url('https://picsum.photos/1000/400') center/cover;
 }
-header .actions{
+
+.profile{
     display:flex;
-    gap:10px;
     align-items:center;
-}
-header a{
+    padding:15px;
     background:white;
-    color:var(--primary);
-    padding:8px 14px;
-    border-radius:10px;
-    font-weight:600;
-    text-decoration:none;
+    margin-bottom:10px;
 }
-#headerActiveStatus{
-    background:rgba(255,255,255,0.9);
-    padding:4px 10px;
-    border-radius:8px;
-    font-weight:700;
-    color:#2563eb;
-    font-size:10px;
-    display:flex;
-    align-items:center;
-    gap:6px;
-}
-.active-dot{
-    width:10px;
-    height:10px;
-    background:#16a34a;
+
+.profile img{
+    width:90px;
+    height:90px;
     border-radius:50%;
-    animation:blink 1s infinite;
+    border:4px solid white;
+    margin-top:-45px;
 }
-@keyframes blink{
-    0%,50%,100%{opacity:1;}
-    25%,75%{opacity:0;}
+
+.profile h2{
+    margin-left:15px;
 }
-.info-bar{
-    background:white;
+
+/* Video Section */
+.gallery{
     padding:10px;
-    text-align:center;
-    font-size:14px;
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
-#scrollContainer{
-    height:calc(100vh - 120px);
-    overflow:auto;
-}
-.video-container{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:14px;
-    padding:16px;
-    max-width:1200px;
-    margin:auto;
-}
+
 .video-card{
     background:white;
-    border-radius:14px;
+    margin-bottom:12px;
+    border-radius:10px;
     overflow:hidden;
-    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    box-shadow:0 1px 3px rgba(0,0,0,0.1);
 }
-.video-title{
-    padding:10px 12px;
-    font-weight:600;
-    background:#f8fafc;
-}
-.video-card iframe{
+
+.video-card img{
     width:100%;
-    height:200px;
-    border:none;
-}
-.download-btn{
-    display:block;
-    margin:10px;
-    padding:9px;
-    background:var(--primary);
-    color:white;
-    border-radius:8px;
-    text-align:center;
-    font-weight:600;
-    text-decoration:none;
-}
-.scroll-controls{
-    position:fixed;
-    right:12px;
-    bottom:80px;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-}
-.scroll-controls button{
-    width:46px;
-    height:46px;
-    border:none;
-    border-radius:50%;
-    background:var(--primary);
-    color:white;
-    font-size:20px;
     cursor:pointer;
 }
-@media(max-width:480px){
-    .video-container{grid-template-columns:1fr;}
+
+.video-title{
+    padding:10px;
+    font-weight:600;
+}
+
+/* Video Modal */
+.modal{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.8);
+    justify-content:center;
+    align-items:center;
+}
+
+.modal video{
+    width:90%;
+    max-height:80%;
+}
+
+.close{
+    position:absolute;
+    top:20px;
+    right:20px;
+    color:white;
+    font-size:25px;
+    cursor:pointer;
 }
 </style>
 </head>
 
 <body>
 
-<div id="introOverlay">
-    <video id="introVideo" playsinline></video>
-    <button id="skipIntroBtn" onclick="closeIntro()">Skip</button>
+<div class="header">Official Media Page</div>
+
+<div class="cover"></div>
+
+<div class="profile">
+    <img src="https://picsum.photos/200">
+    <h2>Official Video Gallery</h2>
 </div>
 
-<header>
-    <h2>FUNNY VIDEO'S</h2>
-    <div class="actions">
-        <div id="headerActiveStatus">
-            <span class="active-dot"></span>
-            <span id="activeNumber">-- Active</span>
-        </div>
-        <a href="https://t.me/toXic_u0u" target="_blank">Telegram</a>
-        <a href="gallery.html">Gallery</a>
-    </div>
-</header>
+<div class="gallery" id="galleryPage"></div>
 
-<div class="info-bar">FUNNY VIDEO LIBRARY • POWERED BY TOXIC</div>
-
-<div id="scrollContainer">
-    <div id="videoList" class="video-container"></div>
-</div>
-
-<div class="scroll-controls">
-    <button onclick="scrollUp()">⬆</button>
-    <button onclick="scrollDown()">⬇</button>
+<!-- Video Modal -->
+<div class="modal" id="videoModal">
+    <span class="close" onclick="closeVideo()">✖</span>
+    <video controls id="videoPlayer"></video>
 </div>
 
 <script>
-window.onload = () => {
-    loadVideos();
-    showIntroOnce();
-    startActiveStatus();
-};
+const apiKey="AIzaSyD7fZ8nt8LFa9iY8GfDBfhakIR2aqSE-Ms";
+const folderId="1C78cLvYYP2AHaalMutvlJaNx0UjtgcIq";
+
+let nextPageToken="";
+let loading=false;
 
 function loadVideos(){
+    if(loading) return;
+    loading=true;
 
-    const folderId = "1C78cLvYYP2AHaalMutvlJaNx0UjtgcIq"; // তোমার folder ID
+    let url=`https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${apiKey}&fields=nextPageToken,files(id,name,mimeType)&pageSize=6`;
+    if(nextPageToken){
+        url+=`&pageToken=${nextPageToken}`;
+    }
 
-    fetch(`https://drive.google.com/embeddedfolderview?id=${folderId}#grid`)
-    .then(response => response.text())
-    .then(data => {
+    fetch(url)
+    .then(r=>r.json())
+    .then(data=>{
+        nextPageToken=data.nextPageToken;
+        const gallery=document.getElementById("galleryPage");
 
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(data, "text/html");
-        const links = doc.querySelectorAll("a");
-
-        const list = document.getElementById("videoList");
-        list.innerHTML = "";
-
-        links.forEach(link => {
-
-            const url = link.href;
-            if(url.includes("/file/d/")){
-
-                const fileId = url.split("/file/d/")[1].split("/")[0];
-
-                list.innerHTML += `
+        data.files.forEach(f=>{
+            if(f.mimeType.includes("video")){
+                gallery.innerHTML+=`
                 <div class="video-card">
-                    <div class="video-title">${link.textContent}</div>
-                    <iframe src="https://drive.google.com/file/d/${fileId}/preview"></iframe>
-                    <a class="download-btn" href="https://drive.google.com/uc?export=download&id=${fileId}">Download</a>
-                </div>`;
+                    <img src="https://drive.google.com/thumbnail?id=${f.id}&sz=w800"
+                    onclick="openVideo('${f.id}')">
+                    <div class="video-title">${f.name}</div>
+                </div>
+                `;
             }
-
         });
 
-    })
-    .catch(error => console.log(error));
+        loading=false;
+    });
 }
 
-function showIntroOnce(){
-    if(localStorage.getItem("introShown")) return;
-    const overlay=document.getElementById("introOverlay");
-    const video=document.getElementById("introVideo");
-    overlay.style.display="flex";
-    video.src="https://raw.githubusercontent.com/Robin-Ahmed/my-html-app/main/AdVideo.mp4";
-    video.play();
-    localStorage.setItem("introShown","true");
-    video.onended=closeIntro;
+function openVideo(id){
+    const modal=document.getElementById("videoModal");
+    const player=document.getElementById("videoPlayer");
+    player.src=`https://drive.google.com/uc?export=download&id=${id}`;
+    modal.style.display="flex";
 }
 
-function closeIntro(){
-    document.getElementById("introOverlay").style.display="none";
+function closeVideo(){
+    document.getElementById("videoModal").style.display="none";
+    document.getElementById("videoPlayer").pause();
 }
 
-function scrollUp(){
-    document.getElementById("scrollContainer").scrollTo({top:0,behavior:'smooth'});
-}
-
-function scrollDown(){
-    const c=document.getElementById("scrollContainer");
-    c.scrollTo({top:c.scrollHeight,behavior:'smooth'});
-}
-
-const activeNumbers=[9,7,8,11,13,15,6];
-
-function startActiveStatus(){
-    const el=document.getElementById("activeNumber");
-    function update(){
-        const num=activeNumbers[Math.floor(Math.random()*activeNumbers.length)];
-        el.textContent=`${num} Active`;
+/* Infinite Scroll */
+window.addEventListener("scroll",()=>{
+    if(window.innerHeight+window.scrollY>=document.body.offsetHeight-200){
+        loadVideos();
     }
-    update();
-    setInterval(update,3000);
-}
+});
+
+loadVideos();
 </script>
 
 </body>
