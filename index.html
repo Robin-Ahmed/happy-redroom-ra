@@ -1,184 +1,209 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<!-- CREATED BY -->
-<marquee behavior="scroll" direction="left" class="threeD-text">
-    Powered By : ToXic 🎯 , This Application Continues Uploading Video 🎞️ Fast Download And Enjoy
-</marquee>
-
-<style>
-.threeD-text {
-    font-size: 22px;
-    font-weight: bold;
-    color: #fff;
-    padding: 10px;
-    background: #111;
-    text-shadow: 
-        1px 1px 0px #ff00c8,
-        2px 2px 0px #ff00c8,
-        3px 3px 0px #ff00c8,
-        4px 4px 0px #ff00c8,
-        5px 5px 10px rgba(255,0,200,0.7);
-    font-family: Arial, sans-serif;
-}
-body {
-    margin:0;
-    padding:0;
-    background: black;
-    font-family: Arial;
-}
-</style>
-
-<!-- mobile zoom lock + cache off -->
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
+<title>XVIDEO Official</title>
+
+<!-- GOOGLE FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
+/* RESET */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-    body { 
-        background: white; 
-    }
+body {
+    font-family: 'Roboto', sans-serif;
+    background: #f5f6fa;
+    color: #333;
+}
 
-    .video-box {
-        margin: 20px auto;
+/* HEADER */
+header {
+    background: linear-gradient(90deg, #1877f2, #42a5ff);
+    padding: 20px;
+    text-align: center;
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* TELEGRAM BUTTON */
+.telegram-btn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: #0088cc;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 500;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+    z-index: 1001;
+}
+.telegram-btn:hover {
+    transform: scale(1.05);
+}
+
+/* VIDEO CONTAINER */
+.video-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* VIDEO CARD */
+.video-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    width: 320px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* VIDEO TITLE */
+.video-card .title {
+    padding: 15px;
+    background: linear-gradient(90deg, #1877f2, #42a5ff);
+    color: white;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* IFRAME */
+.video-card iframe {
+    width: 100%;
+    height: 180px;
+    border: none;
+}
+
+/* DOWNLOAD BUTTON */
+.video-card .download-btn {
+    display: block;
+    text-align: center;
+    margin: 15px;
+    padding: 10px 0;
+    background: #ff4757;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+.video-card .download-btn:hover {
+    background: #e84118;
+}
+
+/* NO INTERNET BOX */
+#no-internet {
+    display: none;
+    text-align: center;
+    padding: 50px 20px;
+    font-size: 22px;
+    background: #ffe6e6;
+    color: #c0392b;
+    font-weight: bold;
+    border-radius: 15px;
+    margin: 20px auto;
+    width: 90%;
+    border: 2px solid #e74c3c;
+}
+
+/* RESPONSIVE */
+@media(max-width: 350px){
+    .video-card {
         width: 90%;
-        background: white;
-        padding: 15px;
-        border-radius: 15px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        border-left: 6px solid #1877f2;
     }
-
-    .title-box {
-        background: linear-gradient(90deg, #1877f2, #42a5ff);
-        padding: 10px 15px;
-        border-radius: 10px;
-        font-size: 18px;
-        font-weight: bold;
-        color: white;
-        margin-bottom: 10px;
-        text-align: center;
-    }
-
-    iframe {
-        width: 100%;
-        height: 300px;
-        border: none;
-        border-radius: 10px;
-        margin-top: 10px;
-    }
-
-    .download-btn {
-        display: inline-block;
-        margin-top: 10px;
-        background: red;
-        color: white;
-        padding: 10px 15px;
-        border-radius: 10px;
-        text-decoration: none;
-        font-size: 16px;
-        font-weight: bold;
-    }
-
-    .download-btn:hover {
-        background: darkred;
-    }
-
-    /* No Internet Box */
-    #no-internet {
-        display: none;
-        text-align: center;
-        padding: 50px 20px;
-        font-size: 22px;
-        background: #fff2f2;
-        color: #b30000;
-        font-weight: bold;
-        border-radius: 10px;
-        margin: 20px;
-        border: 2px solid red;
-    }
-
+}
 </style>
-
-<script>
-function checkInternet() {
-    if (navigator.onLine) {
-        document.getElementById("no-internet").style.display = "none";
-        document.getElementById("main-content").style.display = "block";
-        loadVideos();
-    } else {
-        document.getElementById("main-content").style.display = "none";
-        document.getElementById("no-internet").style.display = "block";
-    }
-}
-
-// Auto detect internet ON/OFF
-window.addEventListener("online", checkInternet);
-window.addEventListener("offline", checkInternet);
-
-window.onload = checkInternet;
-
-// =====================
-// VIDEO LOAD FUNCTION
-// =====================
-function loadVideos() {
-    const apiKey = "AIzaSyD7fZ8nt8LFa9iY8GfDBfhakIR2aqSE-Ms";
-    const folderId = "1C78cLvYYP2AHaalMutvlJaNx0UjtgcIq";
-
-    const url =
-        `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${apiKey}&fields=files(id,name,mimeType)`;
-
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            const list = document.getElementById("videoList");
-            list.innerHTML = ""; // clear old videos
-
-            data.files.forEach(file => {
-                if (file.mimeType.includes("video")) {
-
-                    const box = document.createElement("div");
-                    box.className = "video-box";
-
-                    box.innerHTML = `
-                        <div class="title-box">${file.name}</div>
-                        <iframe src="https://drive.google.com/file/d/${file.id}/preview" allow="autoplay" allowfullscreen></iframe>
-                        <a class="download-btn" href="https://drive.google.com/uc?export=download&id=${file.id}">
-                            Download
-                        </a>
-                    `;
-
-                    list.appendChild(box);
-                }
-            });
-        });
-}
-
-</script>
-
 </head>
 
 <body>
-<!-- Telegram Floating Button -->
-<a href="https://t.me/toXic_u0u" 
-   style="position:fixed; top:10px; right:10px; background:#0088cc; color:white; padding:10px 15px; border-radius:10px; font-weight:bold; text-decoration:none; box-shadow:0 4px 10px rgba(0,0,0,0.2);">
-   Telegram
-</a>
 
-<h2 style="text-align:center; padding:15px; background:#1877f2; color:white; margin:0;">XVIDEO</h2>
+<!-- TELEGRAM BUTTON -->
+<a href="https://t.me/toXic_u0u" class="telegram-btn">Telegram</a>
 
-<!-- No Internet Box -->
+<!-- HEADER -->
+<header>XVIDEO Official</header>
+
+<!-- NO INTERNET BOX -->
 <div id="no-internet">
     ❌ No Internet Connection <br><br>
-    🔌 Please Turn On WiFi or Mobile Data  
+    🔌 Please turn on WiFi or Mobile Data
 </div>
 
-<!-- Main Loaded Content -->
-<div id="main-content" style="display:none;">
-    <div id="videoList"></div>
-</div>
+<!-- VIDEO LIST -->
+<div class="video-container" id="videoList"></div>
+
+<script>
+// INTERNET CHECK
+function checkInternet() {
+    const list = document.getElementById("videoList");
+    const noNet = document.getElementById("no-internet");
+    if(navigator.onLine){
+        noNet.style.display = "none";
+        list.style.display = "flex";
+        loadVideos();
+    } else {
+        noNet.style.display = "block";
+        list.style.display = "none";
+    }
+}
+window.addEventListener("online", checkInternet);
+window.addEventListener("offline", checkInternet);
+window.onload = checkInternet;
+
+// VIDEO LOAD FUNCTION
+function loadVideos(){
+    const apiKey = "AIzaSyD7fZ8nt8LFa9iY8GfDBfhakIR2aqSE-Ms";
+    const folderId = "1C78cLvYYP2AHaalMutvlJaNx0UjtgcIq";
+
+    const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${apiKey}&fields=files(id,name,mimeType)`;
+
+    fetch(url)
+    .then(res=>res.json())
+    .then(data=>{
+        const list = document.getElementById("videoList");
+        list.innerHTML = "";
+
+        if(data.files.length === 0){
+            list.innerHTML = "<p style='text-align:center; width:100%; font-weight:bold;'>No videos found!</p>";
+            return;
+        }
+
+        data.files.forEach(file=>{
+            if(file.mimeType.includes("video")){
+                const card = document.createElement("div");
+                card.className = "video-card";
+                card.innerHTML = `
+                    <div class="title">${file.name}</div>
+                    <iframe src="https://drive.google.com/file/d/${file.id}/preview" allow="autoplay; fullscreen"></iframe>
+                    <a class="download-btn" href="https://drive.google.com/uc?export=download&id=${file.id}">Download</a>
+                `;
+                list.appendChild(card);
+            }
+        });
+    });
+}
+</script>
 
 </body>
 </html>
