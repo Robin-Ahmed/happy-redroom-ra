@@ -26,7 +26,6 @@ body {
 header {
     background: linear-gradient(90deg, #1877f2, #42a5ff);
     padding: 20px;
-    text-align: center;
     color: white;
     font-size: 28px;
     font-weight: 700;
@@ -35,6 +34,26 @@ header {
     position: sticky;
     top: 0;
     z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* GALLERY BUTTON IN HEADER */
+#gallery-btn {
+    background: white;
+    color: #1877f2;
+    padding: 8px 18px;
+    border-radius: 25px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: 0.2s all;
+}
+#gallery-btn:hover {
+    background: #f0f0f0;
+    transform: scale(1.05);
 }
 
 /* COVER PHOTO */
@@ -44,7 +63,6 @@ header {
     background: url('https://picsum.photos/1200/400') center/cover no-repeat;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    position: relative;
 }
 
 /* TELEGRAM FLOATING BUTTON */
@@ -149,14 +167,21 @@ header {
         bottom: 15px;
         right: 15px;
     }
+    #gallery-btn {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<header>REDROOM</header>
+<!-- HEADER WITH GALLERY BUTTON -->
+<header>
+    REDROOM
+    <button id="gallery-btn">Gallery</button>
+</header>
 
 <!-- COVER PHOTO -->
 <div class="cover-photo"></div>
@@ -192,6 +217,7 @@ window.addEventListener("offline", checkInternet);
 window.onload = checkInternet;
 
 // VIDEO LOAD FUNCTION
+let allVideos = []; // keep videos for gallery toggle
 function loadVideos(){
     const apiKey = "AIzaSyD7fZ8nt8LFa9iY8GfDBfhakIR2aqSE-Ms";
     const folderId = "1C78cLvYYP2AHaalMutvlJaNx0UjtgcIq";
@@ -209,20 +235,32 @@ function loadVideos(){
             return;
         }
 
-        data.files.forEach(file=>{
-            if(file.mimeType.includes("video")){
-                const card = document.createElement("div");
-                card.className = "video-card";
-                card.innerHTML = `
-                    <div class="title">${file.name}</div>
-                    <iframe src="https://drive.google.com/file/d/${file.id}/preview" allow="autoplay; fullscreen"></iframe>
-                    <a class="download-btn" href="https://drive.google.com/uc?export=download&id=${file.id}">Download</a>
-                `;
-                list.appendChild(card);
-            }
-        });
+        allVideos = data.files.filter(file => file.mimeType.includes("video"));
+
+        renderVideos(allVideos);
     });
 }
+
+// RENDER VIDEOS FUNCTION
+function renderVideos(videos){
+    const list = document.getElementById("videoList");
+    list.innerHTML = "";
+    videos.forEach(file=>{
+        const card = document.createElement("div");
+        card.className = "video-card";
+        card.innerHTML = `
+            <div class="title">${file.name}</div>
+            <iframe src="https://drive.google.com/file/d/${file.id}/preview" allow="autoplay; fullscreen"></iframe>
+            <a class="download-btn" href="https://drive.google.com/uc?export=download&id=${file.id}">Download</a>
+        `;
+        list.appendChild(card);
+    });
+}
+
+// GALLERY BUTTON CLICK
+document.getElementById("gallery-btn").addEventListener("click", ()=>{
+    renderVideos(allVideos); // show all videos
+});
 </script>
 
 </body>
