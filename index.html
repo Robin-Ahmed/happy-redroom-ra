@@ -30,27 +30,46 @@ body{
 .cover{
     margin-top:60px;
     height:180px;
-    background:url('https://picsum.photos/1000/400') center/cover;
+    background:url('https://picsum.photos/1000/400?random=10') center/cover;
+    background-size:cover;
 }
 
+/* Profile Section */
 .profile{
     display:flex;
     align-items:center;
     padding:15px;
     background:white;
     margin-bottom:10px;
+    position:relative;
 }
 
 .profile img{
     width:90px;
     height:90px;
     border-radius:50%;
+    object-fit:cover;
     border:4px solid white;
     margin-top:-45px;
 }
 
 .profile h2{
     margin-left:15px;
+    font-size:20px;
+}
+
+.verified{
+    display:inline-block;
+    width:20px;
+    height:20px;
+    background:#1877f2;
+    color:white;
+    border-radius:50%;
+    font-size:14px;
+    text-align:center;
+    line-height:20px;
+    font-weight:bold;
+    margin-left:5px;
 }
 
 /* Video Section */
@@ -87,11 +106,13 @@ body{
     background:rgba(0,0,0,0.8);
     justify-content:center;
     align-items:center;
+    z-index:2000;
 }
 
 .modal video{
     width:90%;
     max-height:80%;
+    border-radius:10px;
 }
 
 .close{
@@ -112,8 +133,8 @@ body{
 <div class="cover"></div>
 
 <div class="profile">
-    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200" class="profile-pic">
-    <h2>Official Video Gallery</h2>
+    <img src="https://source.unsplash.com/200x200/?girl,portrait" class="profile-pic">
+    <h2>Ruhan Oky <span class="verified">✔</span></h2>
 </div>
 
 <div class="gallery" id="galleryPage"></div>
@@ -125,12 +146,13 @@ body{
 </div>
 
 <script>
-const apiKey="AIzaSyD7fZ8nt8LFa9iY8GfDBfhakIR2aqSE-Ms";
-const folderId="1C78cLvYYP2AHaalMutvlJaNx0UjtgcIq";
+const apiKey="AIzaSyD7fZ8nt8LFa9iY8GfDBfhakIR2aqSE-Ms"; // আপনার API Key
+const folderId="1C78cLvYYP2AHaalMutvlJaNx0UjtgcIq"; // আপনার Folder ID
 
 let nextPageToken="";
 let loading=false;
 
+// Load videos from Google Drive
 function loadVideos(){
     if(loading) return;
     loading=true;
@@ -157,11 +179,14 @@ function loadVideos(){
                 `;
             }
         });
-
+        loading=false;
+    }).catch(e=>{
+        console.error("Error loading videos:", e);
         loading=false;
     });
 }
 
+// Open video modal
 function openVideo(id){
     const modal=document.getElementById("videoModal");
     const player=document.getElementById("videoPlayer");
@@ -169,18 +194,23 @@ function openVideo(id){
     modal.style.display="flex";
 }
 
+// Close video modal
 function closeVideo(){
-    document.getElementById("videoModal").style.display="none";
-    document.getElementById("videoPlayer").pause();
+    const modal=document.getElementById("videoModal");
+    const player=document.getElementById("videoPlayer");
+    player.pause();
+    player.src="";
+    modal.style.display="none";
 }
 
-/* Infinite Scroll */
+// Infinite scroll
 window.addEventListener("scroll",()=>{
-    if(window.innerHeight+window.scrollY>=document.body.offsetHeight-200){
+    if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 200){
         loadVideos();
     }
 });
 
+// Initial load
 loadVideos();
 </script>
 
