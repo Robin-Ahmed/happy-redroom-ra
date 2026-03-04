@@ -9,17 +9,8 @@
 
 <style>
 /* RESET */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: 'Roboto', sans-serif;
-    background: #f5f6fa;
-    color: #333;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Roboto', sans-serif; background: #f5f6fa; color: #333; }
 
 /* HEADER */
 header {
@@ -50,10 +41,7 @@ header {
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     transition: 0.2s all;
 }
-#gallery-btn:hover {
-    background: #f0f0f0;
-    transform: scale(1.05);
-}
+#gallery-btn:hover { background: #f0f0f0; transform: scale(1.05); }
 
 /* COVER PHOTO */
 .cover-photo {
@@ -80,19 +68,10 @@ header {
     transition: transform 0.2s, background 0.2s;
     z-index: 1001;
 }
-.telegram-btn:hover {
-    background: #006699;
-    transform: scale(1.1);
-}
+.telegram-btn:hover { background: #006699; transform: scale(1.1); }
 
 /* VIDEO CONTAINER */
-.video-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
-}
+.video-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px; }
 
 /* VIDEO CARD */
 .video-card {
@@ -103,10 +82,7 @@ header {
     width: 320px;
     transition: transform 0.2s, box-shadow 0.2s;
 }
-.video-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-}
+.video-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
 
 /* VIDEO TITLE */
 .video-card .title {
@@ -118,11 +94,7 @@ header {
 }
 
 /* IFRAME */
-.video-card iframe {
-    width: 100%;
-    height: 180px;
-    border: none;
-}
+.video-card iframe { width: 100%; height: 180px; border: none; }
 
 /* DOWNLOAD BUTTON */
 .video-card .download-btn {
@@ -137,9 +109,7 @@ header {
     font-weight: 500;
     transition: background 0.2s;
 }
-.video-card .download-btn:hover {
-    background: #e84118;
-}
+.video-card .download-btn:hover { background: #e84118; }
 
 /* NO INTERNET BOX */
 #no-internet {
@@ -156,24 +126,21 @@ header {
     border: 2px solid #e74c3c;
 }
 
-/* FULLSCREEN GALLERY MODAL */
+/* FULLSCREEN COLLAGE MODAL */
 #gallery-modal {
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     background: rgba(0,0,0,0.95);
     overflow-y: auto;
     z-index: 2000;
-    padding: 40px 20px;
+    padding: 30px 20px;
 }
 
 #gallery-modal .close-btn {
     position: fixed;
-    top: 20px;
-    right: 30px;
+    top: 20px; right: 30px;
     font-size: 28px;
     font-weight: bold;
     color: white;
@@ -183,65 +150,48 @@ header {
     border-radius: 10px;
     transition: 0.2s;
 }
-#gallery-modal .close-btn:hover {
-    background: rgba(255,255,255,0.2);
-}
+#gallery-modal .close-btn:hover { background: rgba(255,255,255,0.2); }
 
 #gallery-modal .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
     margin-top: 60px;
 }
 
 #gallery-modal iframe {
     width: 100%;
-    height: 200px;
+    height: 150px;
     border-radius: 10px;
 }
 
 /* RESPONSIVE */
 @media(max-width: 350px){
-    .video-card {
-        width: 90%;
-    }
-    .telegram-btn {
-        padding: 12px 18px;
-        bottom: 15px;
-        right: 15px;
-    }
-    #gallery-btn {
-        padding: 6px 12px;
-        font-size: 14px;
-    }
+    .video-card { width: 90%; }
+    .telegram-btn { padding: 12px 18px; bottom: 15px; right: 15px; }
+    #gallery-btn { padding: 6px 12px; font-size: 14px; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- HEADER WITH GALLERY BUTTON -->
 <header>
     REDROOM
     <button id="gallery-btn">Gallery</button>
 </header>
 
-<!-- COVER PHOTO -->
 <div class="cover-photo"></div>
 
-<!-- NO INTERNET BOX -->
 <div id="no-internet">
     ❌ No Internet Connection <br><br>
     🔌 Please turn on WiFi or Mobile Data
 </div>
 
-<!-- VIDEO LIST -->
 <div class="video-container" id="videoList"></div>
 
-<!-- TELEGRAM FLOATING BUTTON -->
 <a href="https://t.me/toXic_u0u" class="telegram-btn">Telegram</a>
 
-<!-- FULLSCREEN GALLERY MODAL -->
 <div id="gallery-modal">
     <span class="close-btn">&times;</span>
     <div class="gallery-grid" id="gallery-grid"></div>
@@ -278,14 +228,12 @@ function loadVideos(){
     .then(data=>{
         const list = document.getElementById("videoList");
         list.innerHTML = "";
-
         if(!data.files || data.files.length === 0){
             list.innerHTML = "<p style='text-align:center; width:100%; font-weight:bold;'>No videos found!</p>";
             return;
         }
 
         allVideos = data.files.filter(file => file.mimeType.includes("video"));
-
         renderVideos(allVideos);
     });
 }
@@ -306,7 +254,7 @@ function renderVideos(videos){
     });
 }
 
-// GALLERY MODAL
+// GALLERY COLLAGE MODAL
 const galleryBtn = document.getElementById("gallery-btn");
 const galleryModal = document.getElementById("gallery-modal");
 const galleryGrid = document.getElementById("gallery-grid");
@@ -322,16 +270,8 @@ galleryBtn.addEventListener("click", ()=>{
     galleryModal.style.display = "block";
 });
 
-closeBtn.addEventListener("click", ()=>{
-    galleryModal.style.display = "none";
-});
-
-// CLOSE MODAL ON CLICK OUTSIDE
-window.addEventListener("click", (e)=>{
-    if(e.target == galleryModal){
-        galleryModal.style.display = "none";
-    }
-});
+closeBtn.addEventListener("click", ()=>{ galleryModal.style.display = "none"; });
+window.addEventListener("click", (e)=>{ if(e.target == galleryModal){ galleryModal.style.display = "none"; } });
 </script>
 
 </body>
