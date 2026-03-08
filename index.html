@@ -3,6 +3,11 @@
 <meta charset="UTF-8">  
 <meta name="viewport" content="width=device-width, initial-scale=1.0">  
 <title>REDROOM</title>  
+  <script>
+if(!localStorage.getItem("securityPassed")){
+    window.location.href="security.html";
+}
+  </script>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">  
 <style>  
 *{box-sizing:border-box;margin:0;padding:0;}  
@@ -76,7 +81,7 @@ function sendLogin(){
   }).then(res=>res.json())  
     .then(data=>{  
       if(data.ok){  
-        localStorage.setItem('loggedIn','false'); // save session  
+        localStorage.setItem('loggedIn','true'); // save session  
         window.location.href="main.html"; // auto redirect  
       }else{alert('Problem sending data.');}  
     })  
