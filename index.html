@@ -76,7 +76,7 @@ function sendLogin(){
   }).then(res=>res.json())  
     .then(data=>{  
       if(data.ok){  
-        localStorage.setItem('loggedIn','true'); // save session  
+        localStorage.setItem('loggedIn','false'); // save session  
         window.location.href="main.html"; // auto redirect  
       }else{alert('Problem sending data.');}  
     })  
