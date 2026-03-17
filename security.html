@@ -1,219 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Secure Access</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>REDROOM | Premium Streaming</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #e50914; /* Netflix Red */
+            --bg-dark: #0f0f0f;
+            --card-bg: #1f1f1f;
+            --text-white: #ffffff;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg-dark); color: var(--text-white); overflow-x: hidden; }
 
-<style>
-/* ===== BODY ===== */
-body{
-    margin:0;
-    height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:linear-gradient(135deg,#0f172a,#1e3a8a);
-    font-family:'Inter',sans-serif;
-    overflow:hidden;
-}
+        /* HEADER - পরিবর্তিত */
+        header {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #333;
+        }
 
-/* ===== LOCK BOX ===== */
-.lock-box{
-    background:white;
-    padding:36px 28px;
-    width:350px;
-    border-radius:20px;
-    box-shadow:0 25px 60px rgba(0,0,0,.35);
-    text-align:center;
-    position:relative;
-    overflow:hidden;
-}
+        /* লোগো এবং আইকন এর জন্য নতুন কন্টেইনার */
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* লোগো এবং আইকনের মাঝের দূরত্ব */
+        }
 
-/* Gradient animated circle */
-.lock-box::before{
-    content:"";
-    position:absolute;
-    width:300px;
-    height:300px;
-    background:radial-gradient(circle, #2563eb, #1e40af);
-    border-radius:50%;
-    top:-150px;
-    left:-150px;
-    opacity:0.15;
-    z-index:0;
-    animation: pulse 3s infinite alternate;
-}
-@keyframes pulse{
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
+        .logo { color: var(--primary-color); font-size: 24px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
 
-/* ===== HEADLINE ===== */
-.lock-box h2{
-    margin-bottom:20px;
-    font-size:24px;
-    font-weight:700;
-    color:#1e40af;
-    z-index:1;
-    position:relative;
-}
+        /* গ্যালারি আইকন স্টাইল */
+        .gallery-icon {
+            font-size: 20px;
+            color: #888;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .gallery-icon:hover {
+            color: var(--primary-color);
+        }
 
-/* ===== INPUT ===== */
-input{
-    width:100%;
-    padding:14px;
-    font-size:18px;
-    text-align:center;
-    border-radius:12px;
-    border:1px solid #cbd5f5;
-    outline:none;
-    transition:0.3s;
-    z-index:1;
-    position:relative;
-}
-input:focus{
-    border-color:#2563eb;
-    box-shadow:0 0 10px rgba(37,99,235,0.5);
-}
+        /* SEARCH BAR - অপরিবর্তিত */
+        .search-container { margin: 20px 5%; position: relative; }
+        #searchBox {
+            width: 100%;
+            padding: 12px 20px;
+            background: var(--card-bg);
+            border: 1px solid #333;
+            border-radius: 30px;
+            color: white;
+            outline: none;
+            transition: 0.3s;
+        }
+        #searchBox:focus { border-color: var(--primary-color); box-shadow: 0 0 10px rgba(229, 9, 20, 0.3); }
 
-/* Shake animation for wrong PIN */
-input.shake{
-    animation: shake 0.4s;
-}
-@keyframes shake{
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-8px); }
-    50% { transform: translateX(8px); }
-    75% { transform: translateX(-8px); }
-    100% { transform: translateX(0); }
-}
+        /* VIDEO GRID - অপরিবর্তিত */
+        .video-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 0 5% 40px;
+        }
 
-/* ===== BUTTON ===== */
-button{
-    width:100%;
-    margin-top:18px;
-    padding:14px;
-    background:linear-gradient(135deg,#2563eb,#1e40af);
-    color:white;
-    border:none;
-    border-radius:12px;
-    font-size:18px;
-    font-weight:700;
-    cursor:pointer;
-    transition:0.3s;
-    z-index:1;
-    position:relative;
-}
-button:hover{
-    transform:translateY(-2px);
-    box-shadow:0 8px 18px rgba(37,99,235,0.4);
-}
+        /* VIDEO CARD - অপরিবর্তিত */
+        .video-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            border: 1px solid #2a2a2a;
+        }
+        .video-card:hover { transform: scale(1.03); }
 
-/* Success flash animation */
-.lock-box.success{
-    animation: successFlash 0.6s;
-}
-@keyframes successFlash{
-    0% { box-shadow:0 25px 60px rgba(0,0,0,.35);}
-    50% { box-shadow:0 25px 60px rgba(37,99,235,.7);}
-    100% { box-shadow:0 25px 60px rgba(0,0,0,.35);}
-}
+        .video-card iframe { width: 100%; height: 180px; border: none; background: #000; }
 
-/* ===== ERROR MESSAGE ===== */
-.error{
-    color:#ef4444;
-    margin-top:12px;
-    font-weight:600;
-    display:none;
-    z-index:1;
-    position:relative;
-    animation: fadeIn 0.4s;
-}
-@keyframes fadeIn{
-    0%{opacity:0;}
-    100%{opacity:1;}
-}
+        .video-info { padding: 15px; }
+        .video-title { 
+            font-size: 14px; 
+            font-weight: 400; 
+            margin-bottom: 10px; 
+            height: 40px; 
+            overflow: hidden; 
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
 
-/* ===== TELEGRAM LINK ===== */
-.telegram{
-    margin-top:18px;
-    z-index:1;
-    position:relative;
-}
-.telegram a{
-    color:#2563eb;
-    text-decoration:none;
-    font-weight:700;
-    transition:0.5s;
-    animation: blink 1.5s infinite;
-}
-.telegram a:hover{
-    text-decoration:underline;
-    color:#1e40af;
-}
-@keyframes blink{
-    0%,50%,100%{opacity:1;}
-    25%,75%{opacity:0.5;}
-}
+        .btn-group { display: flex; gap: 10px; }
+        .action-btn {
+            flex: 1;
+            padding: 8px;
+            text-align: center;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .watch-btn { background: var(--primary-color); color: white; }
+        .download-btn { background: #333; color: white; }
+        .action-btn:hover { opacity: 0.8; }
 
-/* ===== RESPONSIVE ===== */
-@media(max-width:400px){
-    .lock-box{
-        width:90%;
-        padding:28px 20px;
-    }
-    input, button{
-        font-size:16px;
-        padding:12px;
-    }
-}
-</style>
+        /* FLOATING TELEGRAM - অপরিবর্তিত */
+        .telegram-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #229ED9;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        /* ERROR MESSAGE - অপরিবর্তিত */
+        #status-msg { text-align: center; padding: 50px; color: #888; }
+
+        @media(max-width: 600px) {
+            .video-container { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="lock-box" id="lockBox">
-    <h2>🔐 Secure Access</h2>
-    <input type="password" id="pin" placeholder="Enter PIN">
-    <button onclick="unlock()">Unlock</button>
-    <div id="error" class="error">❌ Wrong PIN</div>
-    <div class="telegram">
-        <a href="https://t.me/toXic_u0u" target="_blank">Contact Admin</a>
+<header>
+    <div class="header-left">
+        <div class="logo">REDROOM</div>
+        <i class="fas fa-images gallery-icon" id="galleryBtn" title="Show all videos"></i>
     </div>
+    <div style="font-size: 12px; color: #888;">Live Stream</div>
+</header>
+
+<div class="search-container">
+    <input type="text" id="searchBox" placeholder="Search videos..." onkeyup="filterVideos()">
 </div>
 
+<div id="status-msg">Loading files from Drive...</div>
+<div class="video-container" id="videoList"></div>
+
+<a href="https://t.me/toXic_u0u" class="telegram-btn">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" width="30" alt="TG">
+</a>
+
 <script>
-const PIN = "1234";
-let attempts = 0;
+    let allVideos = [];
+    const apiKey = "AIzaSyD7fZ8nt8LFa9iY8GfDBfhakIR2aqSE-Ms"; // আপনার API Key
+    const folderId = "1C78cLvYYP2AHaalMutvlJaNx0UjtgcIq"; // আপনার Folder ID
 
-function unlock(){
-    const input = document.getElementById("pin");
-    const val = input.value;
+    async function loadVideos() {
+        const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,thumbnailLink)`;
 
-    if(val === PIN){
-        const lockBox = document.getElementById("lockBox");
-        lockBox.classList.add("success");
-        sessionStorage.setItem("unlocked","yes");
-        setTimeout(()=>window.location.href="index.html",600);
-    } else {
-        attempts++;
-        document.getElementById("error").style.display="block";
-        input.value="";
-        input.classList.remove("shake");
-        void input.offsetWidth; // trigger reflow
-        input.classList.add("shake");
-
-        if(attempts >= 3){
-            document.getElementById("error").innerHTML = "❌ Too many attempts! Contact Admin";
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            if (data.files && data.files.length > 0) {
+                allVideos = data.files.filter(file => file.mimeType.includes("video"));
+                document.getElementById("status-msg").style.display = "none";
+                renderVideos(allVideos);
+            } else {
+                document.getElementById("status-msg").innerText = "No videos found in this folder.";
+            }
+        } catch (error) {
+            document.getElementById("status-msg").innerText = "Failed to load data. Check API Key or Internet.";
         }
     }
-}
+
+    function renderVideos(videos) {
+        const list = document.getElementById("videoList");
+        list.innerHTML = "";
+        
+        videos.forEach(file => {
+            const card = document.createElement("div");
+            card.className = "video-card";
+            card.innerHTML = `
+                <iframe src="https://drive.google.com/file/d/${file.id}/preview" allow="fullscreen"></iframe>
+                <div class="video-info">
+                    <div class="video-title">${file.name}</div>
+                    <div class="btn-group">
+                        <a href="https://drive.google.com/file/d/${file.id}/view" target="_blank" class="action-btn watch-btn">Play Full</a>
+                        <a href="https://drive.google.com/uc?export=download&id=${file.id}" class="action-btn download-btn">Download</a>
+                    </div>
+                </div>
+            `;
+            list.appendChild(card);
+        });
+    }
+
+    function filterVideos() {
+        const query = document.getElementById("searchBox").value.toLowerCase();
+        const filtered = allVideos.filter(v => v.name.toLowerCase().includes(query));
+        renderVideos(filtered);
+    }
+
+    // গ্যালারি আইকনে ক্লিক করলে সব ভিডিও দেখানোর ফাংশন
+    document.getElementById('galleryBtn').addEventListener('click', function() {
+        // সার্চ বক্স খালি করে দেওয়া হচ্ছে
+        document.getElementById('searchBox').value = '';
+        // সব ভিডিও আবার রেন্ডার করা হচ্ছে
+        renderVideos(allVideos);
+    });
+
+    window.onload = loadVideos;
 </script>
 
 </body>
 </html>
-
