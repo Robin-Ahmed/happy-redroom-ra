@@ -17,9 +17,10 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Poppins', sans-serif; background: var(--bg-dark); color: var(--text-white); overflow-x: hidden; }
 
+        /* HEADER */
         header {
             background: rgba(0, 0, 0, 0.9);
-            padding: 15px 5%;
+            padding: 12px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -30,24 +31,25 @@
             border-bottom: 1px solid #333;
         }
 
-        .header-left { display: flex; align-items: center; gap: 15px; }
-        .logo { color: var(--primary-color); font-size: 24px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .logo { color: var(--primary-color); font-size: 22px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Gallery Button */
-        .gallery-btn {
+        /* Folder/Gallery Button Style */
+        .folder-btn {
             display: flex;
             align-items: center;
             gap: 6px;
             background: #2a2a2a;
-            padding: 6px 12px;
-            border-radius: 20px;
+            padding: 6px 14px;
+            border-radius: 6px;
             cursor: pointer;
             transition: 0.3s;
-            color: #eee;
-            font-size: 12px;
+            color: #ffca28; /* Folder Yellow Color */
+            font-size: 13px;
             font-weight: 500;
+            border: 1px solid #444;
         }
-        .gallery-btn:hover { background: var(--primary-color); }
+        .folder-btn:hover { background: #333; border-color: #ffca28; }
 
         .search-container { margin: 20px 5%; }
         #searchBox {
@@ -55,11 +57,12 @@
             padding: 12px 20px;
             background: var(--card-bg);
             border: 1px solid #333;
-            border-radius: 30px;
+            border-radius: 8px;
             color: white;
             outline: none;
         }
 
+        /* MAIN VIDEO GRID */
         .video-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -73,86 +76,57 @@
             overflow: hidden;
             border: 1px solid #2a2a2a;
         }
-
         .video-card iframe { width: 100%; height: 180px; border: none; background: #000; }
-
         .video-info { padding: 12px; }
         .video-title { font-size: 13px; margin-bottom: 10px; height: 38px; overflow: hidden; color: #ddd; }
 
         .btn-group { display: flex; gap: 10px; }
         .view-stat {
-            flex: 1;
-            background: #262626;
-            color: #aaa;
-            padding: 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
+            flex: 1; background: #262626; color: #aaa;
+            padding: 8px; border-radius: 6px; font-size: 11px;
+            display: flex; align-items: center; justify-content: center; gap: 5px;
         }
-
         .download-btn {
-            flex: 1;
-            padding: 8px;
-            text-align: center;
-            background: #333;
-            color: white;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 11px;
-            font-weight: 600;
+            flex: 1; padding: 8px; text-align: center;
+            background: #333; color: white; border-radius: 6px;
+            text-decoration: none; font-size: 11px; font-weight: 600;
         }
 
-        /* FULLSCREEN GALLERY MODAL */
-        #galleryOverlay {
+        /* FOLDER LIST OVERLAY (File Manager View) */
+        #folderOverlay {
             display: none;
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: #000;
+            background: #121212;
             z-index: 2000;
             overflow-y: auto;
-            padding: 20px;
         }
 
-        .gallery-header {
+        .folder-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding: 10px 0;
+            padding: 15px 20px;
+            background: #1f1f1f;
+            border-bottom: 1px solid #333;
+            position: sticky;
+            top: 0;
+        }
+
+        .file-list { padding: 10px 0; }
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
             border-bottom: 1px solid #222;
-        }
-
-        .close-gallery {
-            font-size: 24px;
-            color: var(--primary-color);
             cursor: pointer;
+            transition: 0.2s;
         }
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
-        }
-
-        .gallery-item {
-            aspect-ratio: 16/9;
-            background: #111;
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .gallery-item iframe { width: 100%; height: 100%; border: none; pointer-events: none; }
-        
-        /*Overlay to make it clickable*/
-        .click-layer {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            cursor: pointer; z-index: 5;
-        }
+        .file-item:hover { background: #222; }
+        .file-icon { color: #ffca28; font-size: 20px; margin-right: 15px; }
+        .file-name { font-size: 14px; color: #eee; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .file-arrow { color: #555; font-size: 12px; }
 
         .telegram-btn {
             position: fixed; bottom: 25px; right: 25px;
@@ -170,12 +144,11 @@
 <header>
     <div class="header-left">
         <div class="logo">REDROOM</div>
-        <div class="gallery-btn" onclick="openGallery()">
-            <i class="fas fa-images"></i>
-            <span>All Video</span>
-        </div>
     </div>
-    <div style="font-size: 11px; color: #666;">Streaming</div>
+    <div class="folder-btn" onclick="openFolder()">
+        <i class="fas fa-folder-open"></i>
+        <span>Folder</span>
+    </div>
 </header>
 
 <div class="search-container">
@@ -185,12 +158,16 @@
 <div id="status-msg">Loading...</div>
 <div class="video-container" id="videoList"></div>
 
-<div id="galleryOverlay">
-    <div class="gallery-header">
-        <h2 style="font-size: 18px;">Video Gallery</h2>
-        <i class="fas fa-times close-gallery" onclick="closeGallery()"></i>
+<div id="folderOverlay">
+    <div class="folder-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <i class="fas fa-chevron-left" onclick="closeFolder()" style="cursor:pointer; color:var(--primary-color);"></i>
+            <span style="font-weight:600;">All Files</span>
+        </div>
+        <span style="font-size:12px; color:#777;" id="fileCount">0 Files</span>
     </div>
-    <div class="gallery-grid" id="galleryGrid"></div>
+    <div class="file-list" id="fileListContainer">
+        </div>
 </div>
 
 <a href="https://t.me/toXic_u0u" class="telegram-btn" target="_blank">
@@ -203,7 +180,7 @@
     const folderId = "1C78cLvYYP2AHaalMutvlJaNx0UjtgcIq";
 
     function getRandomViews() {
-        const counts = ["1.2k", "850", "2.5k", "3.1k", "920", "1.7k", "4.2k", "560"];
+        const counts = ["1.2k", "2.5k", "3.1k", "1.7k", "4.2k"];
         return counts[Math.floor(Math.random() * counts.length)];
     }
 
@@ -215,9 +192,10 @@
             if (data.files) {
                 allVideos = data.files.filter(file => file.mimeType.includes("video"));
                 document.getElementById("status-msg").style.display = "none";
+                document.getElementById("fileCount").innerText = allVideos.length + " Files";
                 renderVideos(allVideos);
             }
-        } catch (e) { document.getElementById("status-msg").innerText = "Error!"; }
+        } catch (e) { document.getElementById("status-msg").innerText = "Error loading data!"; }
     }
 
     function renderVideos(videos) {
@@ -240,34 +218,38 @@
         });
     }
 
-    // GALLERY FUNCTIONS
-    function openGallery() {
-        const grid = document.getElementById("galleryGrid");
-        grid.innerHTML = "";
+    // FOLDER FUNCTIONS
+    function openFolder() {
+        const container = document.getElementById("fileListContainer");
+        container.innerHTML = "";
+        
         allVideos.forEach(file => {
             const item = document.createElement("div");
-            item.className = "gallery-item";
+            item.className = "file-item";
+            item.onclick = () => playFile(file.id);
             item.innerHTML = `
-                <iframe src="https://drive.google.com/file/d/${file.id}/preview"></iframe>
-                <div class="click-layer" onclick="playFromGallery('${file.id}')"></div>
+                <i class="fas fa-video file-icon"></i>
+                <div class="file-name">${file.name}</div>
+                <i class="fas fa-chevron-right file-arrow"></i>
             `;
-            grid.appendChild(item);
+            container.appendChild(item);
         });
-        document.getElementById("galleryOverlay").style.display = "block";
-        document.body.style.overflow = "hidden"; // Prevent background scroll
+        
+        document.getElementById("folderOverlay").style.display = "block";
+        document.body.style.overflow = "hidden";
     }
 
-    function closeGallery() {
-        document.getElementById("galleryOverlay").style.display = "none";
+    function closeFolder() {
+        document.getElementById("folderOverlay").style.display = "none";
         document.body.style.overflow = "auto";
     }
 
-    function playFromGallery(id) {
-        closeGallery();
-        // Scroll to that specific video if needed, or just filter it
+    function playFile(id) {
+        closeFolder();
         const selected = allVideos.filter(v => v.id === id);
         renderVideos(selected);
-        document.getElementById("searchBox").value = "Playing from Gallery...";
+        window.scrollTo(0,0);
+        document.getElementById("searchBox").value = "";
     }
 
     function filterVideos() {
