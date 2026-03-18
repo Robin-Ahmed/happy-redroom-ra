@@ -7,201 +7,86 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #e50914;
-            --bg-dark: #0f0f0f;
-            --card-bg: #1f1f1f;
-            --text-white: #ffffff;
-        }
-
+        :root { --primary-color: #e50914; --bg-dark: #0f0f0f; --card-bg: #1f1f1f; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg-dark); color: var(--text-white); overflow-x: hidden; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg-dark); color: white; }
 
         header {
             background: rgba(0, 0, 0, 0.9);
-            padding: 12px 5%;
+            padding: 10px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 1000;
             border-bottom: 1px solid #333;
         }
 
-        .header-left { display: flex; align-items: center; gap: 12px; }
-        .logo { color: var(--primary-color); font-size: 22px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-
-        .folder-btn {
+        /* Center Profile Style */
+        .user-profile {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 6px;
-            background: #2a2a2a;
-            padding: 6px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.3s;
-            color: #ffca28;
-            font-size: 13px;
-            font-weight: 500;
-            border: 1px solid #444;
+            gap: 2px;
         }
+        .user-profile i { color: var(--primary-color); font-size: 18px; }
+        .user-profile span { font-size: 10px; color: #aaa; font-weight: 600; text-transform: capitalize; }
 
-        .search-container { margin: 20px 5%; }
-        #searchBox {
-            width: 100%;
-            padding: 12px 20px;
-            background: var(--card-bg);
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: white;
-            outline: none;
-        }
+        .logo { color: var(--primary-color); font-size: 20px; font-weight: 700; }
+        .folder-btn { color: #ffca28; cursor: pointer; font-size: 18px; }
 
-        .video-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            padding: 0 5% 40px;
-        }
-
-        .video-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #2a2a2a;
-            position: relative; /* Ads overlay এর জন্য */
-        }
-
-        /* পপ-আউট আইকনের ওপর অদৃশ্য Ads লেয়ার */
-        .ads-overlay {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 65px;
-            height: 65px;
-            z-index: 100;
-            cursor: pointer;
-            background: transparent;
-        }
-
-        .video-card iframe { width: 100%; height: 180px; border: none; background: #000; }
+        .video-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px 5%; }
+        .video-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; position: relative; border: 1px solid #2a2a2a; }
+        .ads-overlay { position: absolute; top: 0; right: 0; width: 60px; height: 60px; z-index: 100; cursor: pointer; }
+        .video-card iframe { width: 100%; height: 180px; border: none; }
         .video-info { padding: 12px; }
-        .video-title { font-size: 13px; margin-bottom: 10px; height: 38px; overflow: hidden; color: #ddd; }
-
-        .btn-group { display: flex; gap: 10px; }
-        .view-stat {
-            flex: 1; background: #262626; color: #aaa;
-            padding: 8px; border-radius: 6px; font-size: 11px;
-            display: flex; align-items: center; justify-content: center; gap: 5px;
-        }
-        .download-btn {
-            flex: 1; padding: 8px; text-align: center;
-            background: #333; color: white; border-radius: 6px;
-            text-decoration: none; font-size: 11px; font-weight: 600;
-        }
-
-        /* Folder List Overlay */
-        #folderOverlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: #121212;
-            z-index: 2000;
-            overflow-y: auto;
-        }
-
-        .folder-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background: #1f1f1f;
-            border-bottom: 1px solid #333;
-            position: sticky;
-            top: 0;
-        }
-
-        .file-list { padding: 10px 0; }
-        .file-item {
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            border-bottom: 1px solid #222;
-            cursor: pointer;
-        }
-        .file-icon { color: #ffca28; font-size: 20px; margin-right: 15px; }
-        .file-name { font-size: 14px; color: #eee; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-        .telegram-btn {
-            position: fixed; bottom: 25px; right: 25px;
-            background: #229ED9; width: 55px; height: 55px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 999;
-        }
-
-        #status-msg { text-align: center; padding: 50px; color: #888; }
-        @media(max-width: 600px) { .video-container { grid-template-columns: 1fr; } }
+        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
+        .download-btn { flex: 1; padding: 8px; text-align: center; background: #333; color: white; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: 600; }
+        
+        #folderOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #121212; z-index: 2000; overflow-y: auto; }
+        .file-item { display: flex; align-items: center; padding: 15px 20px; border-bottom: 1px solid #222; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="header-left">
-        <div class="logo">CHILD VIDEO</div>
+    <div class="logo">REDROOM</div>
+    
+    <div class="user-profile">
+        <i class="fas fa-user-circle"></i>
+        <span id="displayUserName">Guest</span>
     </div>
-    <div class="folder-btn" onclick="openFolder()">
-        <i class="fas fa-folder-open"></i>
-        <span>Folder</span>
-    </div>
+
+    <div class="folder-btn" onclick="openFolder()"><i class="fas fa-folder-open"></i></div>
 </header>
 
-<div class="search-container">
-    <input type="text" id="searchBox" placeholder="Search videos..." onkeyup="filterVideos()">
-</div>
-
-<div id="status-msg">Loading Files...</div>
 <div class="video-container" id="videoList"></div>
 
 <div id="folderOverlay">
-    <div class="folder-header">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <i class="fas fa-chevron-left" onclick="closeFolder()" style="cursor:pointer; color:var(--primary-color);"></i>
-            <span style="font-weight:600;">Files Manager</span>
-        </div>
-        <span style="font-size:12px; color:#777;" id="fileCount">0 Files</span>
+    <div style="padding: 20px; border-bottom: 1px solid #333; display: flex; justify-content: space-between;">
+        <span>Files Helper</span>
+        <i class="fas fa-times" onclick="closeFolder()"></i>
     </div>
-    <div class="file-list" id="fileListContainer"></div>
+    <div id="fileListContainer"></div>
 </div>
-
-<a href="https://t.me/ToXic_uUu" class="telegram-btn" target="_blank">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" width="25" alt="TG">
-</a>
 
 <script>
     let allVideos = [];
     const apiKey = "AIzaSyD7fZ8nt8LFa9iY8GfDBfhakIR2aqSE-Ms"; 
     const folderId = "1C78cLvYYP2AHaalMutvlJaNx0UjtgcIq";
 
-    function getRandomViews() {
-        const counts = ["1.2k", "2.8k", "3.5k", "950", "4.2k", "1.1k", "5.7k"];
-        return counts[Math.floor(Math.random() * counts.length)];
-    }
+    // ইউজার নেম সেট করা
+    window.onload = () => {
+        const savedName = localStorage.getItem("userName");
+        if(savedName) document.getElementById("displayUserName").innerText = savedName;
+        loadVideos();
+    };
 
     async function loadVideos() {
         const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType)`;
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
-            if (data.files) {
-                allVideos = data.files.filter(file => file.mimeType.includes("video"));
-                document.getElementById("status-msg").style.display = "none";
-                document.getElementById("fileCount").innerText = allVideos.length + " Files";
-                renderVideos(allVideos);
-            }
-        } catch (e) { document.getElementById("status-msg").innerText = "Network Error!"; }
+        const res = await fetch(url);
+        const data = await res.json();
+        allVideos = data.files.filter(f => f.mimeType.includes("video"));
+        renderVideos(allVideos);
     }
 
     function renderVideos(videos) {
@@ -212,13 +97,11 @@
             card.className = "video-card";
             card.innerHTML = `
                 <a href="ads.html" class="ads-overlay"></a>
-                
-                <iframe src="https://drive.google.com/file/d/${file.id}/preview" allow="fullscreen"></iframe>
-                
+                <iframe src="https://drive.google.com/file/d/${file.id}/preview"></iframe>
                 <div class="video-info">
-                    <div class="video-title">${file.name}</div>
+                    <div style="font-size:12px;">${file.name}</div>
                     <div class="btn-group">
-                        <div class="view-stat"><i class="fas fa-eye"></i> ${getRandomViews()}</div>
+                        <div style="flex:1; font-size:11px; color:#888;"><i class="fas fa-eye"></i> 4.2k</div>
                         <a href="ads.html" class="download-btn">Download</a>
                     </div>
                 </div>
@@ -233,31 +116,13 @@
         allVideos.forEach(file => {
             const item = document.createElement("div");
             item.className = "file-item";
-            item.onclick = () => { closeFolder(); renderVideos([file]); window.scrollTo(0,0); };
-            item.innerHTML = `
-                <i class="fas fa-file-video file-icon"></i>
-                <div class="file-name">${file.name}</div>
-                <i class="fas fa-chevron-right" style="color:#333; font-size:10px;"></i>
-            `;
+            item.onclick = () => { closeFolder(); renderVideos([file]); };
+            item.innerHTML = `<i class="fas fa-video" style="color:#ffca28; margin-right:15px;"></i> ${file.name}`;
             container.appendChild(item);
         });
         document.getElementById("folderOverlay").style.display = "block";
-        document.body.style.overflow = "hidden";
     }
-
-    function closeFolder() {
-        document.getElementById("folderOverlay").style.display = "none";
-        document.body.style.overflow = "auto";
-    }
-
-    function filterVideos() {
-        const query = document.getElementById("searchBox").value.toLowerCase();
-        const filtered = allVideos.filter(v => v.name.toLowerCase().includes(query));
-        renderVideos(filtered);
-    }
-
-    window.onload = loadVideos;
+    function closeFolder() { document.getElementById("folderOverlay").style.display = "none"; }
 </script>
-
 </body>
 </html>
