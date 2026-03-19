@@ -6,6 +6,16 @@
     <title>REDROOM | Premium Streaming</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <script>
+        // --- SECURITY CHECK ---
+        // যদি ইউজার লক পেজ থেকে না আসে, তবে তাকে আবার lock.html-এ পাঠিয়ে দিবে
+        // নোট: আপনি নিজে টেস্ট করার সময় এটি সাময়িকভাবে রিমুভ করে রাখতে পারেন
+        if (!document.referrer.includes("lock.html")) {
+            window.location.href = "lock.html";
+        }
+    </script>
+
     <style>
         :root { --primary-color: #e50914; --bg-dark: #0f0f0f; --card-bg: #1f1f1f; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -21,7 +31,6 @@
             border-bottom: 1px solid #333;
         }
 
-        /* Center Profile Style */
         .user-profile {
             display: flex;
             flex-direction: column;
@@ -36,11 +45,14 @@
 
         .video-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px 5%; }
         .video-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; position: relative; border: 1px solid #2a2a2a; }
-        .ads-overlay { position: absolute; top: 0; right: 0; width: 60px; height: 60px; z-index: 100; cursor: pointer; }
+        
+        /* অদৃশ্য লেয়ার যা ক্লিক করলে ads.html-এ নিয়ে যাবে */
+        .ads-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 180px; z-index: 10; cursor: pointer; }
+        
         .video-card iframe { width: 100%; height: 180px; border: none; }
         .video-info { padding: 12px; }
         .btn-group { display: flex; gap: 10px; margin-top: 10px; }
-        .download-btn { flex: 1; padding: 8px; text-align: center; background: #333; color: white; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: 600; }
+        .download-btn { flex: 1; padding: 8px; text-align: center; background: #e50914; color: white; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: 600; }
         
         #folderOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #121212; z-index: 2000; overflow-y: auto; }
         .file-item { display: flex; align-items: center; padding: 15px 20px; border-bottom: 1px solid #222; cursor: pointer; }
@@ -63,8 +75,8 @@
 
 <div id="folderOverlay">
     <div style="padding: 20px; border-bottom: 1px solid #333; display: flex; justify-content: space-between;">
-        <span>Files Helper</span>
-        <i class="fas fa-times" onclick="closeFolder()"></i>
+        <span style="font-weight: 600;">Files Library</span>
+        <i class="fas fa-times" onclick="closeFolder()" style="cursor: pointer;"></i>
     </div>
     <div id="fileListContainer"></div>
 </div>
@@ -74,19 +86,27 @@
     const apiKey = "AIzaSyD7fZ8nt8LFa9iY8GfDBfhakIR2aqSE-Ms"; 
     const folderId = "1C78cLvYYP2AHaalMutvlJaNx0UjtgcIq";
 
-    // ইউজার নেম সেট করা
     window.onload = () => {
+        // ads.html থেকে আসা ইউজার নেম সেট করা
         const savedName = localStorage.getItem("userName");
-        if(savedName) document.getElementById("displayUserName").innerText = savedName;
+        if(savedName) {
+            document.getElementById("displayUserName").innerText = savedName;
+        }
         loadVideos();
     };
 
     async function loadVideos() {
-        const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType)`;
-        const res = await fetch(url);
-        const data = await res.json();
-        allVideos = data.files.filter(f => f.mimeType.includes("video"));
-        renderVideos(allVideos);
+        try {
+            const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType)`;
+            const res = await fetch(url);
+            const data = await res.json();
+            if(data.files) {
+                allVideos = data.files.filter(f => f.mimeType.includes("video"));
+                renderVideos(allVideos);
+            }
+        } catch (error) {
+            console.error("Drive Error:", error);
+        }
     }
 
     function renderVideos(videos) {
@@ -97,12 +117,13 @@
             card.className = "video-card";
             card.innerHTML = `
                 <a href="ads.html" class="ads-overlay"></a>
+                
                 <iframe src="https://drive.google.com/file/d/${file.id}/preview"></iframe>
                 <div class="video-info">
-                    <div style="font-size:12px;">${file.name}</div>
+                    <div style="font-size:12px; margin-bottom: 5px; height: 35px; overflow: hidden;">${file.name}</div>
                     <div class="btn-group">
-                        <div style="flex:1; font-size:11px; color:#888;"><i class="fas fa-eye"></i> 4.2k</div>
-                        <a href="ads.html" class="download-btn">Download</a>
+                        <div style="flex:1; font-size:11px; color:#888;"><i class="fas fa-eye"></i> 4.2k views</div>
+                        <a href="ads.html" class="download-btn">Download / Play</a>
                     </div>
                 </div>
             `;
@@ -122,7 +143,10 @@
         });
         document.getElementById("folderOverlay").style.display = "block";
     }
-    function closeFolder() { document.getElementById("folderOverlay").style.display = "none"; }
+    
+    function closeFolder() { 
+        document.getElementById("folderOverlay").style.display = "none"; 
+    }
 </script>
 </body>
 </html>
